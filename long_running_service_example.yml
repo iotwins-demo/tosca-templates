@@ -1,0 +1,58 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+imports:
+  - indigo_custom_types: https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+
+description: >
+ TOSCA example template for long running service
+
+topology_template:
+
+  inputs:
+
+    cpus:
+      type: float
+      description: Amount of CPUs for this service
+      required: yes
+      default: 1.0
+
+    mem:
+      type: scalar-unit.size
+      description: Amount of Memory for this service
+      required: yes
+      default: 1 GB
+
+    example_input:
+      type: string
+      description: Example input that will be available for the application in the env var HOSTNAME
+      required: yes
+
+  node_templates:
+
+    marathon:
+      type: tosca.nodes.indigo.Container.Application.Docker.Marathon
+      properties:
+        environment_variables:
+          HOSTNAME: { get_input: example_input }
+        uris: []
+      artifacts:
+        image:
+          file: iotwinsdemo/esi-services-demo:latest
+          type: tosca.artifacts.Deployment.Image.Container.Docker
+      requirements:
+        - host: docker_runtime
+
+    docker_runtime:
+      type: tosca.nodes.indigo.Container.Runtime.Docker
+      capabilities:
+        host:
+          properties:
+            num_cpus: { get_input: cpus}
+            mem_size: { get_input: mem}
+            publish_ports:
+               - protocol: tcp
+                 source: 1337
+
+  outputs:
+    endpoint:
+      value:  { concat: [ "http://", { get_attribute : [ marathon, load_balancer_ips, 0 ] }, ':', { get_attribute : [ docker_runtime, host, publish_ports, 0, target ] } ] }
