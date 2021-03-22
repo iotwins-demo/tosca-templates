@@ -6,7 +6,7 @@ imports:
 description: >
   Launch a compute node getting the IP and SSH credentials to access via ssh
 metadata:
-  display_name: Start a virtual machine 22
+  display_name: Start a virtual machine 2
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/vm-icon.png
   #allowed_groups: "developers"
 
