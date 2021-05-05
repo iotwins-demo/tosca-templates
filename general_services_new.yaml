@@ -7,7 +7,7 @@ imports:
 description: Run general data-processing services for digital twins.
 
 metadata:
-  display_name: General Services
+  display_name: General Services - New
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
 
 topology_template:
