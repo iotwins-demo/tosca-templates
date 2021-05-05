@@ -40,43 +40,36 @@ topology_template:
       type: string
       description: MinIO Username
       required: no
-      default: <minio_username>
 
     minio_endpoint:
       type: string
       description: MinIO endpoint
       required: no
-      default: <minio_endpoint>
 
     minio_bucket:
       type: string
       description: MinIO bucket
       required: no
-      default: <minio_bucket>
 
     iam_client_id:
       type: string
       description: IAM Client Identifier
       required: yes
-      default: <IAM_client_ID>
 
     iam_server:
       type: string
       description: IAM Server
       required: yes
-      default: <IAM_endpoint>
 
     iam_client_secret:
       type: string
       description: IAM Client Secret
       required: yes
-      default: <IAM_client_Secret>
 
     refresh_token:
       type: string
       description: oidc-agent refresh token
       required: yes
-      default: <refresh_token>
 
   node_templates:
 
