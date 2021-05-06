@@ -8,6 +8,7 @@ description: "Run Artificial Intelligence (AI) and simulation based services for
 metadata:
   display_name: General Services
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
+  allowed_groups: "developers"
 
 topology_template:
   inputs:
