@@ -1,0 +1,162 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+imports:
+  - indigo_custom_types:
+      https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+
+description: "Run time-series classification services for digital twins."
+
+metadata:
+  display_name: Time-series classification
+  icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
+
+topology_template:
+  inputs:
+
+    function_selector:
+      type: integer
+      description: Desired Service (0- Time-series classification supervised model training; 1- Time-series classification supervised model inference)
+      required: yes
+
+    cpus:
+      type: float
+      default: 1
+      description: Amount of CPUs for this job
+      required: yes
+
+    mem:
+      type: string
+      description: Amount of Memory for this job
+      required: yes
+      constraints:
+        - valid_values: ['256 MB', '512 MB', '1024 MB', '2048 MB', '4096 MB']
+
+    input_filename:
+      type: string
+      description: Name of the file containing the data
+      required: yes
+
+    val_col:
+      type: string
+      description: Name of the column containing the values
+      required: yes
+
+    label_col:
+      type: string
+      description: Name of the column containing the label (required for the training service)
+      required: no
+      default: 'Label'
+
+    ts_idx:
+      type: string
+      description: Name of the column representing the index of the timeseries
+      required: yes
+
+    n_vars:
+      type: integer
+      description: Number of variables constituting the timeseries
+      required: yes
+
+    n_class:
+      type: integer
+      description: Number of classes (required for the training service)
+      required: no
+      default: '1'
+
+    hparams_file:
+      type: string
+      description: Name of the pickle file containing the Python dictionary with hyperparameters to be used to build the model
+      required: no
+      default: 'Default'
+
+    trained_model_file:
+      type: string
+      description: Name of the file containing the trained model for timeseries classification (required for the inference service)
+      required: no
+      default: 'None'
+
+    scaler_filename:
+      type: string
+      description: Name of the data scaler to be used to normalize data
+      required: no
+      default: 'None'
+
+    minio_usr:
+      type: string
+      description: MinIO Username
+      required: no
+      default: 'aborgh'
+
+    minio_endpoint:
+      type: string
+      description: MinIO endpoint
+      required: no
+      default: 'https://vm-131-154-97-111.cloud.cnaf.infn.it:9000/'
+
+    minio_bucket:
+      type: string
+      description: MinIO bucket
+      required: no
+      default: 'aborghesi'
+
+    iam_client_id:
+      type: string
+      description: IAM Client Identifier
+      required: yes
+
+    iam_server:
+      type: string
+      description: IAM Server 
+      required: yes
+
+    iam_client_secret:
+      type: string
+      description: IAM Client Secret
+      required: yes
+
+    refresh_token: 
+      type: string
+      description: oidc-agent refresh token
+      required: yes
+
+  node_templates:
+
+    preprocessing_job:
+      type: tosca.nodes.indigo.Container.Application.Docker.Chronos
+      properties:
+        command: '/run.sh'
+        retries: 2
+        environment_variables:
+          APPLICATION: 'ts_classification'
+          INPUT_FILENAME: { get_input: input_filename }
+          FUNCTION: { get_input: function_selector }
+          REFRESH_TOKEN: { get_input: refresh_token }
+          IAM_SERVER: { get_input: iam_server }
+          IAM_CLIENT_SECRET: { get_input: iam_client_secret }
+          IAM_CLIENT_ID: { get_input: iam_client_id }
+          USER: { get_input: minio_usr }
+          BUCKET: { get_input: minio_bucket }
+          ENDPOINT: { get_input: minio_endpoint }
+          VAL_COL: { get_input: val_col }
+          LABEL_COL: { get_input: label_col }
+          ID_TS_COL: { get_input: ts_idx }
+          N_VARS: { get_input: n_vars }
+          N_CLASSES: { get_input: n_class }
+          NN_HPARAMS_FILENAME: { get_input: hparams_file }
+          TRAINED_MODEL_FILENAME: { get_input: trained_model_file }
+          SCALER_FILENAME: { get_input: scaler_filename }
+
+      artifacts:
+        image:
+          file: 'aborghesi/iotwins_wp3_demo:1.0.0'
+          type: tosca.artifacts.Deployment.Image.Container.Docker
+      requirements:
+        - host: docker_runtime
+
+    docker_runtime:
+      type: tosca.nodes.indigo.Container.Runtime.Docker
+      capabilities:
+        host:
+          properties:
+            num_cpus: { get_input: cpus }
+            mem_size: { get_input: mem }
