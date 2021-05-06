@@ -1,0 +1,175 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+
+imports:
+  - indigo_custom_types:
+      https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+
+description: "Run anomaly detection services for digital twins."
+
+metadata:
+  display_name: Anomaly Detection Services
+  icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
+
+topology_template:
+  inputs:
+
+    function_selector:
+      type: integer
+      description: Desired Service (0- Anomaly detection semi-supervised model training; 1- Anomaly detection semi-supervised model inference; 2- Anomaly detection supervised model training; 3- Anomaly detection supervised model inference)
+      required: yes
+      constraints:
+        - valid_values: ['0', '1', '2', '3']
+
+    cpus:
+      type: float
+      default: 1
+      description: Amount of CPUs for this job
+      required: yes
+
+    mem:
+      type: string
+      description: Amount of Memory for this job
+      required: yes
+      constraints:
+        - valid_values: ['256 MB', '512 MB', '1024 MB', '2048 MB', '4096 MB']
+
+    input_filename:
+      type: string
+      description: Name of the file containing the data
+      required: yes
+
+    trained_model_filename:
+      type: string
+      description: Name of the file containing the trained model (required for the inference service)
+      required: No
+      default: "None"
+
+    label_col:
+      type: string
+      description: Name of the column indicating the label
+      required: yes
+      default: "label"
+
+    sep:
+      type: string
+      description: Separator used inside the file containing data
+      required: no 
+      default: ";"
+
+    ssup_hparams_filename:
+      type: string
+      description: Name of the file containing the hyperparameters of the semi-supervised autoencoder model
+      required: no
+      default: "default_hparams_ae_ssup"
+
+    sup_hparams_filename:
+      type: string
+      description: Name of the file containing the hyperparameters of the supervised autoencoder model
+      required: no
+      default: "default_hparams_ae_sup"
+
+    sup_cl_hparams_filename:
+      type: string
+      description: Name of the file containing the hyperparameters of the supervised classifier model
+      required: no
+      default: "default_hparams_cl_sup"
+
+    scaler_filename:
+      type: string
+      description: Name of the data scaler to be used to normalize data
+      required: no
+      default: "None"
+
+    n_perc:
+      type: integer
+      description: N-percentile to compute the anomaly detection threshold
+      required: no
+      default: -1
+
+    threshold:
+      type: float
+      description: Anomaly detection threshold
+      required: no
+      default: 0.5
+
+    minio_usr:
+      type: string
+      description: MinIO Username
+      required: no
+      default: 'aborgh'
+
+    minio_endpoint:
+      type: string
+      description: MinIO endpoint
+      required: no
+      default: 'https://vm-131-154-97-111.cloud.cnaf.infn.it:9000/'
+
+    minio_bucket:
+      type: string
+      description: MinIO bucket
+      required: no
+      default: 'aborghesi'
+
+    iam_client_id:
+      type: string
+      description: IAM Client Identifier
+      required: yes
+
+    iam_server:
+      type: string
+      description: IAM Server 
+      required: yes
+
+    iam_client_secret:
+      type: string
+      description: IAM Client Secret
+      required: yes
+
+    refresh_token: 
+      type: string
+      description: oidc-agent refresh token
+      required: yes
+
+  node_templates:
+
+    preprocessing_job:
+      type: tosca.nodes.indigo.Container.Application.Docker.Chronos
+      properties:
+        command: '/run.sh'
+        retries: 2
+        environment_variables:
+          APPLICATION: 'anomaly_detection'
+          INPUT_FILENAME: { get_input: input_filename }
+          LABEL_COL: { get_input: label_col }
+          SEP: { get_input: sep }
+          FUNCTION: { get_input: function_selector }
+          TRAINED_MODEL_FILENAME: { get_input: trained_model_filename }
+          SSUP_HPARAMS_FILENAME: { get_input: ssup_hparams_filename }
+          SUP_HPARAMS_FILENAME: { get_input: sup_hparams_filename }
+          SUP_CL_HPARAMS_FILENAME: { get_input: sup_cl_hparams_filename }
+          N_PERC: { get_input: n_perc }
+          THRESHOLD: { get_input: threshold }
+          SCALER_FILENAME: { get_input: scaler_filename }
+          REFRESH_TOKEN: { get_input: refresh_token }
+          IAM_SERVER: { get_input: iam_server }
+          IAM_CLIENT_SECRET: { get_input: iam_client_secret }
+          IAM_CLIENT_ID: { get_input: iam_client_id }
+          USER: { get_input: minio_usr }
+          BUCKET: { get_input: minio_bucket }
+          ENDPOINT: { get_input: minio_endpoint }
+
+      artifacts:
+        image:
+          file: 'aborghesi/iotwins_wp3_demo:1.0.0'
+          type: tosca.artifacts.Deployment.Image.Container.Docker
+      requirements:
+        - host: docker_runtime
+
+
+    docker_runtime:
+      type: tosca.nodes.indigo.Container.Runtime.Docker
+      capabilities:
+        host:
+          properties:
+            num_cpus: { get_input: cpus }
+            mem_size: { get_input: mem }
