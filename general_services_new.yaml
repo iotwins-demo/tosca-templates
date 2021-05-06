@@ -7,7 +7,7 @@ imports:
 description: Run general data-processing services for digital twins.
 
 metadata:
-  display_name: General Services - New
+  display_name: General Services
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
 
 topology_template:
@@ -15,7 +15,7 @@ topology_template:
 
     function_selector:
       type: integer
-      description: Function selector
+      description:
       required: yes
 
     cpus:
@@ -29,7 +29,7 @@ topology_template:
       description: Amount of Memory for this job
       required: yes
       constraints:
-        - valid_values: [256 MB, 512 MB, 1024 MB, 2048 MB, 4096 MB]
+        - valid_values: ['256 MB', '512 MB', '1024 MB', '2048 MB', '4096 MB']
 
     input_filename:
       type: string
@@ -40,16 +40,19 @@ topology_template:
       type: string
       description: MinIO Username
       required: no
+      default: 'aborgh'
 
     minio_endpoint:
       type: string
       description: MinIO endpoint
       required: no
+      default: 'https://vm-131-154-97-111.cloud.cnaf.infn.it:9000/'
 
     minio_bucket:
       type: string
       description: MinIO bucket
       required: no
+      default: 'aborghesi'
 
     iam_client_id:
       type: string
@@ -58,7 +61,7 @@ topology_template:
 
     iam_server:
       type: string
-      description: IAM Server
+      description: IAM Server 
       required: yes
 
     iam_client_secret:
@@ -66,7 +69,7 @@ topology_template:
       description: IAM Client Secret
       required: yes
 
-    refresh_token:
+    refresh_token: 
       type: string
       description: oidc-agent refresh token
       required: yes
@@ -75,7 +78,6 @@ topology_template:
 
     preprocessing_job:
       type: tosca.nodes.indigo.Container.Application.Docker.Chronos
-      #type: tosca.nodes.indigo.Compute
       properties:
         command: '/run.sh'
         retries: 2
@@ -93,7 +95,7 @@ topology_template:
 
       artifacts:
         image:
-          file: 'aborghesi/iotwins_wp3_demo_v3'
+          file: 'aborghesi/iotwins_wp3_demo:1.0.0'
           type: tosca.artifacts.Deployment.Image.Container.Docker
       requirements:
         - host: docker_runtime
