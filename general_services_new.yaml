@@ -79,7 +79,7 @@ topology_template:
     preprocessing_job:
       type: tosca.nodes.indigo.Container.Application.Docker.Chronos
       properties:
-        command: '/run.sh'
+        command: 'chmod u+x && /run.sh'
         retries: 2
         environment_variables:
           APPLICATION: 'general_services'
