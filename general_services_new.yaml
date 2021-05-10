@@ -39,20 +39,20 @@ topology_template:
     minio_usr:
       type: string
       description: MinIO Username
-      required: no
-      default: 'aborgh'
+      required: yes
+#      default: ''
 
     minio_endpoint:
       type: string
       description: MinIO endpoint
-      required: no
-      default: 'https://vm-131-154-97-111.cloud.cnaf.infn.it:9000/'
+      required: yes
+#      default: ''
 
     minio_bucket:
       type: string
       description: MinIO bucket
-      required: no
-      default: 'aborghesi'
+      required: yes
+#      default: ''
 
     iam_client_id:
       type: string
