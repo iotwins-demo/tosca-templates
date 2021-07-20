@@ -8,7 +8,7 @@ description: "Run time-series oversampling services for digital twins."
 
 metadata:
   display_name: Time-series oversampling
-  icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
+  #icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
 
 topology_template:
   inputs:
