@@ -6,7 +6,7 @@ imports:
 description: "Run TDA algorithm for IoTwins."
 
 metadata:
-  display_name: Topological Data Analysys
+  display_name: Topological Data Analysis
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
 
 topology_template:
