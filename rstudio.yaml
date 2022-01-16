@@ -8,7 +8,8 @@ description: >
 
 metadata:
   display_name: RStudio
-
+  icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
+  
 topology_template:
 
   inputs:

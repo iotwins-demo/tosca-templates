@@ -7,7 +7,7 @@ description: "Run TDA algorithm for IoTwins."
 
 metadata:
   display_name: Topological Data Analysis
-  icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
+  icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
 
 topology_template:
   inputs:

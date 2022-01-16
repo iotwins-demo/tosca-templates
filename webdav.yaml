@@ -8,6 +8,7 @@ description: >
 
 metadata:
   display_name: WebDav
+  icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
 
 topology_template:
 
