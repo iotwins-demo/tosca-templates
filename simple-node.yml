@@ -11,6 +11,7 @@ description: >
 metadata:
   display_name: Start a virtual machine
   #icon: https://indigo-paas.cloud.ba.infn.it/public/images/vm-icon.png
+  icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
   #allowed_groups: "developers"
 
 topology_template:
