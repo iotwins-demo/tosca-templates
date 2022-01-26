@@ -5,7 +5,7 @@ imports:
       #https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
 description: Sample Chronos job using GPU.
 metadata:
-  display_name: General Services
+  display_name: Chronos GPU sample
   icon: https://indigo-paas.cloud.ba.infn.it/public/images/IoTwins_Logo.png
 topology_template:
   inputs:
