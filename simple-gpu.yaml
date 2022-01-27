@@ -5,7 +5,7 @@ imports:
       #https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
 description: Simple Chronos job using GPU.
 metadata:
-  display_name: Chronos GPU sample
+  display_name: Simple Chronos GPU
   icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
 topology_template:
   inputs:
