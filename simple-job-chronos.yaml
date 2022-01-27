@@ -1,0 +1,42 @@
+tosca_definitions_version: tosca_simple_yaml_1_0
+imports:
+  - indigo_custom_types:
+      https://baltig.infn.it/infn-cloud/tosca-types/-/raw/master/custom_types.yaml
+      #https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+description: Simple Chronos job using GPU.
+metadata:
+  display_name: Simple Chronos job
+  icon: https://raw.githubusercontent.com/iotwins-demo/tosca-templates/master/iotwins_400x400.jpg
+topology_template:
+  inputs:
+    cpus:
+      type: float
+      default: 1
+      description: Amount of CPUs for this job
+      required: yes
+    mem:
+      type: string
+      description: Amount of Memory for this job
+      required: yes
+      constraints:
+        - valid_values: [256 MB, 512 MB, 1024 MB, 2048 MB, 4096 MB]
+   
+  node_templates:
+    preprocessing_job:
+      type: tosca.nodes.indigo.Container.Application.Docker.Chronos
+      properties:
+        command: 'echo "Hello World"'
+        retries: 2
+      artifacts:
+        image:
+          file: 'ubuntu:latest'
+          type: tosca.artifacts.Deployment.Image.Container.Docker
+      requirements:
+        - host: docker_runtime
+    docker_runtime:
+      type: tosca.nodes.indigo.Container.Runtime.Docker
+      capabilities:
+        host:
+          properties:
+            num_cpus: { get_input: cpus }
+            mem_size: { get_input: mem }
