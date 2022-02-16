@@ -59,14 +59,13 @@ topology_template:
         type: tosca.datatypes.network.PortSpec
       description: Ports to open on the VM to access the service(s)
 
- 
-    users:
-      type: list
-      description: list of users to create on the VM
-      entry_schema:
-        type: tosca.datatypes.indigo.User
-      default: []
-      required: false      
+#    users:
+#      type: list
+#      description: list of users to create on the VM
+#      entry_schema:
+#        type: tosca.datatypes.indigo.User
+#      default: []
+#      required: false      
 
     environment_variables:
       required: no
@@ -108,8 +107,8 @@ topology_template:
 
     server:
       type: tosca.nodes.indigo.Compute
-      properties:
-        os_users: { get_input: users }
+#      properties:
+#        os_users: { get_input: users }
       capabilities:
         endpoint:
           properties:
@@ -144,5 +143,5 @@ topology_template:
       value: { get_attribute: [ server, public_address, 0 ] }
     node_creds:
       value: { get_attribute: [ server, endpoint, credential, 0 ] }
-    os_users:
-      value: { get_property: [ server, os_users, 0 ] }  
+#    os_users:
+#      value: { get_property: [ server, os_users, 0 ] }  
