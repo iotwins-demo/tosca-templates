@@ -6,7 +6,7 @@ imports:
 description: Run a docker container
 
 metadata:
-  display_name: Run docker with persistence volume
+  display_name: Run docker with persistent volume
 
 topology_template:
 
