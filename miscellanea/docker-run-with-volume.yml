@@ -6,7 +6,7 @@ imports:
 description: Run a docker container
 
 metadata:
-  display_name: Run docker
+  display_name: Run docker with persistence volume
 
 topology_template:
 
@@ -21,6 +21,16 @@ topology_template:
       type: scalar-unit.size
       description: Amount of memory for the VM
       default: 2 GB
+      
+    volume_path:
+      type: string
+      default: /data
+      description: Path to the mountpint in the VM
+      
+    volume_size:
+      type: scalar-unit.size
+      description: Size of the volume to be attached
+      default: 10 GB
       
     docker_appname:
       type: string
@@ -48,6 +58,11 @@ topology_template:
       type: string
       description: Command to execute when the container starts
       default: ""
+
+    docker_volume:
+      type: string 
+      description: Path for the voume into the container
+      default: "/data"
 
     service_ports:
       type: map
@@ -105,6 +120,11 @@ topology_template:
         - binding: server
         - link: priv_network
 
+    block_device:
+      type: tosca.nodes.BlockStorage
+      properties:
+        size: { get_input: volume_size }
+
     server:
       type: tosca.nodes.indigo.Compute
 #      properties:
@@ -137,6 +157,14 @@ topology_template:
         environment_variables: { get_input: environment_variables }
       requirements:
         - host: server
+        - local_storage:
+            node: block_device
+            capability: tosca.capabilities.Attachment
+            relationship:
+              type: tosca.relationships.AttachesTo
+              properties:
+                location: { get_input: volume_path }
+                device: vdb
  
   outputs:
     node_ip:
