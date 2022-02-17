@@ -145,6 +145,16 @@ topology_template:
             distribution: ubuntu
             version: 20.04
             type: linux
+      requirements:
+        - local_storage:
+            node: block_device
+            capability: tosca.capabilities.Attachment
+            relationship:
+              type: tosca.relationships.AttachesTo
+              properties:
+                location: { get_input: host_volume }
+                device: vdb
+
  
     docker:
       type: tosca.nodes.indigo.dockerRun
@@ -154,17 +164,12 @@ topology_template:
         docker_tag: { get_input: docker_tag }
         docker_ports: { get_input: ports_mapping }
         docker_command: { get_input: docker_command }
+        docker_volume: { get_input: docker_volume}
+        volume_path: { get_input: volume_path}
         environment_variables: { get_input: environment_variables }
       requirements:
         - host: server
-        - local_storage:
-            node: block_device
-            capability: tosca.capabilities.Attachment
-            relationship:
-              type: tosca.relationships.AttachesTo
-              properties:
-                location: { get_input: volume_path }
-                device: vdb
+
  
   outputs:
     node_ip:
