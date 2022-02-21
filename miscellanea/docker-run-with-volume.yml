@@ -8,6 +8,7 @@ description: Run a docker container
 
 metadata:
   display_name: Run docker with persistent volume
+  allowed_groups: "developers"
 
 topology_template:
 
