@@ -3,6 +3,7 @@ imports:
   - indigo_custom_types:
       https://baltig.infn.it/infn-cloud/tosca-types/-/raw/master/custom_types.yaml
       #https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+
 description: Simple Chronos job using GPU.
 metadata:
   display_name: Simple Chronos GPU
