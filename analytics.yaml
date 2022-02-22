@@ -1,7 +1,8 @@
 tosca_definitions_version: tosca_simple_yaml_1_0
 
 imports:
-  - indigo_custom_types: https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+  #- indigo_custom_types: https://raw.githubusercontent.com/indigo-dc/tosca-types/master/custom_types.yaml
+  - indigo_custom_types: https://baltig.infn.it/infn-cloud/tosca-types/raw/master/custom_types.yaml
 
 description: "Visualizing high-dimensional data in a 2-dimensional space using PCA, LLE or t-SNE algorithms.
 Displaying of the most important data according to the random_forest  method."
