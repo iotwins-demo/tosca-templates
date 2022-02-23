@@ -54,7 +54,7 @@ topology_template:
       default: 18.04
       description: Operating System distribution version
       constraints:
-      - valid_values: [ "18.04", "20.04", "7", "8" ]
+      - valid_values: [ "18.04", "20.04", "7" ]
       
 #    service_ports:
 #      type: map
