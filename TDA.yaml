@@ -60,8 +60,8 @@ topology_template:
           properties:
             num_cpus: { get_input: cpus }
             mem_size: { get_input: mem }
-  policies:
-    - deploy_on_specific_site:
-        type: tosca.policies.indigo.SlaPlacement
-        properties:
-          sla_id: 6053c863708a18be8b8c562e
+#  policies:
+#    - deploy_on_specific_site:
+#        type: tosca.policies.indigo.SlaPlacement
+#        properties:
+#          sla_id: 6053c863708a18be8b8c562e
