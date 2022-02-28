@@ -65,11 +65,11 @@ topology_template:
             publish_ports:
                - protocol: tcp
                  source: 80
-  policies:
-  - deploy_on_specific_site:
-      type: tosca.policies.indigo.SlaPlacement
-      properties:
-        sla_id: 6053c86b708a18be8b8c562f
+#  policies:
+#  - deploy_on_specific_site:
+#      type: tosca.policies.indigo.SlaPlacement
+#      properties:
+#        sla_id: 6053c86b708a18be8b8c562f
 
 
   outputs:
