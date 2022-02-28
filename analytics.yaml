@@ -49,11 +49,11 @@ topology_template:
                 source: 8051
               - protocol: tcp
                 source: 8050
-  policies:
-    - deploy_on_specific_site:
-        type: tosca.policies.indigo.SlaPlacement
-        properties:
-          sla_id: 6053c86b708a18be8b8c562f
+#  policies:
+#    - deploy_on_specific_site:
+#        type: tosca.policies.indigo.SlaPlacement
+#        properties:
+#          sla_id: 6053c86b708a18be8b8c562f
   outputs:
     fake:
       value:  { concat: [ "http://", { get_attribute : [ marathon, load_balancer_ips, 0 ] }, ':', { get_attribute : [ docker_runtime, host, publish_ports, 0, target ] } ] }
